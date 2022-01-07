@@ -87,7 +87,6 @@ const ColorCircles = () => {
     theme.palette.blue.bg,
     theme.palette.dark.bg,
   ];
-  console.log(colors);
   return (
     <>
       {colors.map((color) => (

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { styled } from "@mui/material/styles";
 import Drawer from "@mui/material/Drawer";
 import MuiAppBar from "@mui/material/AppBar";
@@ -11,7 +11,7 @@ import MemberTasksTab from "../components/MemberTasksTab";
 import { useHistory } from "react-router-dom";
 import ChatTab from "../components/ChatTab";
 
-const roomTheme = "green";
+const roomTheme = "yellow";
 const drawerWidth = 310;
 
 const tabs = [
@@ -23,25 +23,15 @@ const tabs = [
 
 export default function RoomLayout(props) {
   const [open, setOpen] = React.useState(false);
-  const [currTab, setCurrTab] = React.useState("Member Tasks");
+  const [currTab, setCurrTab] = React.useState(1);
 
   const history = useHistory();
 
-  const handleDrawerOpen = () => {
-    // if (tab.name === "Log Out") {
-    //   history.push("/");
-    // }
-    // setCurrTab(tab.name);
+  const handleDrawerOpen = (index) => {
+    setCurrTab(index);
+    console.log(currTab);
     setOpen(true);
   };
-
-  // const handleIconButton = (tab) => {
-  //   if (tab.name === "Log Out") {
-  //     history.push("/");
-  //   }
-  //   setCurrTab(tab.name);
-  //   console.log(tab);
-  // };
 
   const handleDrawerClose = () => {
     setOpen(false);
@@ -57,13 +47,17 @@ export default function RoomLayout(props) {
             paddingRight: "16px",
           }}
         >
-          {tabs.map((tab) => (
+          {tabs.map((tab, index) => (
             <IconButton
               key={tab.name}
               color="inherit"
               aria-label="open drawer"
               edge="end"
-              onClick={handleDrawerOpen}
+              onClick={
+                tab.name === "Log Out"
+                  ? () => history.push("/")
+                  : () => handleDrawerOpen(index)
+              }
               style={{ width: "48px", height: "48px", marginBottom: "8px" }}
             >
               <FeatherIcon icon={tab.icon} style={{ color: "white" }} />
@@ -89,9 +83,9 @@ export default function RoomLayout(props) {
         anchor="right"
         open={open}
       >
-        {currTab === "Member Tasks" && <MemberTasksTab roomTheme={roomTheme} />}
-        {currTab === "Room Settings" && <SettingsTab roomTheme={roomTheme} />}
-        {currTab === "Chat" && <ChatTab roomTheme={roomTheme} />}
+        {currTab === 0 && <MemberTasksTab roomTheme={roomTheme} />}
+        {currTab === 1 && <SettingsTab roomTheme={roomTheme} />}
+        {currTab === 2 && <ChatTab roomTheme={roomTheme} />}
       </Drawer>
     </>
   );
