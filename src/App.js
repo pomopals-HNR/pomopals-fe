@@ -4,14 +4,15 @@ import * as React from "react";
 import { theme } from "./theme";
 import { ThemeProvider } from "@mui/material/styles";
 import { CssBaseline } from "@mui/material";
-import Reference from "./pages/Reference";
+import LandingPage from "./pages/LandingPage";
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Navbar />
-      <Reference />
+
+      <LandingPage />
     </ThemeProvider>
   );
 }
