@@ -5,76 +5,45 @@ import { theme } from "../theme";
 import Button from "../components/Button";
 import PlaceholderDp from "../components/PlaceholderDp";
 import FeatherIcon from "feather-icons-react";
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { URI } from "../global";
 
 export default function Room(props) {
-  const [roomName, setRoomName] = useState(props.urlName);
-  const [roomId, setRoomId] = useState(0);
-  const userId = localStorage.getItem("userid")
-    ? localStorage.getItem("userid")
-    : 0;
-  const roomTheme = props.roomTheme;
+  const roomTheme = props.room.theme;
+  const roomName = props.urlName;
+  const roomId = props.room.roomid;
+  const worktime = props.room.worktime;
 
-  useEffect(() => {
-    loadRoomData();
-  }, [roomName]);
-
-  const loadRoomData = () => {
-    if (props.urlName) {
-      axios
-        .post(`${URI}/rooms/${userId}/${roomName}`)
-        .then((res) => {
-          if (res.data[0]) {
-            setRoomName(res.data[0].roomname);
-            setRoomId(res.data[0].roomid);
-          } else {
-            alert("room does not exist!");
-          }
-        })
-        .catch(function (error) {
-          if (error.response) {
-            console.log(error.response.data);
-          } else if (error.request) {
-            console.log(error.request);
-          } else {
-            // Something happened in setting up the request that triggered an Error
-            console.log("Error", error.message);
-          }
-          console.log(error.config);
-        });
-    }
-  };
   return (
-    <RoomContainer roomTheme={roomTheme}>
-      <LeftFloatingSide
-        roomTheme={roomTheme}
-        roomName={roomName}
-        roomId={roomId}
-      />
-
-      <Stack direction="column" alignItems="center">
-        <Typography
-          variant="caption"
-          style={{
-            marginBottom: "88px",
-            color: theme.palette[roomTheme].text.secondary,
-          }}
-        >
-          BREAK TIME
-        </Typography>
-        <Typography
-          variant="display"
-          style={{ color: "white", marginBottom: "60px" }}
-        >
-          30:00
-        </Typography>
-        <Button currTheme={roomTheme} style={{ width: "180px" }}>
-          Start
-        </Button>
-      </Stack>
-    </RoomContainer>
+    <>
+      {roomTheme && (
+        <RoomContainer roomTheme={roomTheme}>
+          <LeftFloatingSide
+            roomTheme={roomTheme}
+            roomName={roomName}
+            roomId={roomId}
+          />
+          <Stack direction="column" alignItems="center">
+            <Typography
+              variant="caption"
+              style={{
+                marginBottom: "88px",
+                color: theme.palette[roomTheme].text.secondary,
+              }}
+            >
+              BREAK TIME
+            </Typography>
+            <Typography
+              variant="display"
+              style={{ color: "white", marginBottom: "60px" }}
+            >
+              {worktime}:00
+            </Typography>
+            <Button currTheme={roomTheme} style={{ width: "180px" }}>
+              Start
+            </Button>
+          </Stack>
+        </RoomContainer>
+      )}
+    </>
   );
 }
 

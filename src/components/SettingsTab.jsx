@@ -3,6 +3,7 @@ import { theme } from "../theme";
 import { Typography, Stack, Divider, TextField } from "@mui/material";
 import IOSSwitch from "./IOSSwitch";
 import Button from "./Button";
+import { themeColors } from "../global";
 
 export default function SettingsTab({ roomTheme }) {
   return (
@@ -80,23 +81,16 @@ export default function SettingsTab({ roomTheme }) {
 }
 
 const ColorCircles = () => {
-  const colors = [
-    theme.palette.purple.bg,
-    theme.palette.yellow.bg,
-    theme.palette.green.bg,
-    theme.palette.blue.bg,
-    theme.palette.dark.bg,
-  ];
   return (
     <>
-      {colors.map((color) => (
+      {themeColors.map((color) => (
         <div
-          key={color}
+          key={color.name}
           style={{
             height: "32px",
             width: "32px",
             borderRadius: "50%",
-            backgroundColor: color,
+            backgroundColor: color.theme,
           }}
         ></div>
       ))}
