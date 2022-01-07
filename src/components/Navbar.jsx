@@ -1,7 +1,15 @@
 import { URI } from "../global";
 import GoogleLogin from "react-google-login";
 
-export default function Navbar() {
+import { useState, useEffect } from "react";
+
+export default function Navbar(props) {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    setUser(props.currentUser);
+  }, [props]);
+
   const handleLogin = async (googleData) => {
     const res = await fetch(`${URI}/google-login`, {
       method: "POST",
@@ -14,6 +22,7 @@ export default function Navbar() {
     });
     const data = await res.json();
     console.log(data);
+    props.onUpdate(data);
   };
 
   const handleFailure = (googleData) => {
