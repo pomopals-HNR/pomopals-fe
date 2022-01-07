@@ -13,6 +13,7 @@ import MemberTasksTab from "../components/MemberTasksTab";
 import { useHistory } from "react-router-dom";
 import ChatTab from "../components/ChatTab";
 import { theme } from "../theme";
+import { Typography } from "@mui/material";
 import { getRandomTheme } from "../global";
 import Modal from "../components/Modal";
 import { io } from "socket.io-client";
@@ -30,6 +31,7 @@ const tabs = [
 export default function RoomLayout(props) {
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const [currTab, setCurrTab] = React.useState(1);
   const [room, setRoom] = useState();
@@ -48,6 +50,7 @@ export default function RoomLayout(props) {
   useEffect(() => {
     if (!localStorage.getItem("name")) {
       setModalOpen(true);
+      setLoading(false);
     } else {
       setUserName(localStorage.getItem("name"));
     }
@@ -103,6 +106,7 @@ export default function RoomLayout(props) {
         .then((res) => {
           if (res.data) {
             const tempRoom = res.data;
+            setLoading(false);
             setRoomName(tempRoom.roomname);
             setUsers(res.data.users);
 
@@ -114,6 +118,7 @@ export default function RoomLayout(props) {
               setRoomTheme(tempRoom.theme);
               setRoom(tempRoom);
             }
+            localStorage.setItem("currTheme", roomTheme);
           } else {
             alert("room does not exist!");
           }
@@ -199,10 +204,6 @@ export default function RoomLayout(props) {
     setDrawerOpen(false);
   };
 
-  const handleModalOpen = () => {
-    setModalOpen(true);
-  };
-
   const handleModalClose = () => {
     createGuest(guestName);
     localStorage.setItem("name", guestName);
@@ -211,8 +212,8 @@ export default function RoomLayout(props) {
   };
 
   return (
-    <>
-      {room && roomTheme && (
+    <div style={{ overflow: "hidden" }}>
+      {!loading && room && roomTheme && (
         <div>
           <AppBar
             position="fixed"
@@ -292,7 +293,22 @@ export default function RoomLayout(props) {
           </Drawer>
         </div>
       )}
-    </>
+      {loading && (
+        <div
+          style={{
+            width: "100vw",
+            height: "98vh",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Typography variant="h3" sx={{ color: "white" }}>
+            Loading...
+          </Typography>
+        </div>
+      )}
+    </div>
   );
 }
 

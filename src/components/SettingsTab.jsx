@@ -28,6 +28,7 @@ export default function SettingsTab(props) {
       })
       .then((res) => {
         props.setRoom(res.data[0]);
+        localStorage.setItem("currTheme", roomTheme);
       });
   };
 
