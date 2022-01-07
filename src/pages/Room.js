@@ -1,16 +1,85 @@
+import { useState, useEffect } from "react";
 import { Stack } from "@mui/material";
 import { Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { theme } from "../theme";
 import Button from "../components/Button";
+import axios from "axios";
+import { URI } from "../global";
 import PlaceholderDp from "../components/PlaceholderDp";
 import OwnTasksBox from "../components/OwnTasksBox";
+import CountdownTimer from "../components/CountdownTimer";
 
 export default function Room(props) {
-  const roomTheme = props.room.theme;
+  //   const roomTheme = props.room.theme;
   const roomName = props.urlName;
   const roomId = props.room.roomid;
-  const worktime = props.room.worktime;
+
+  const [roomTheme, setRoomTheme] = useState(props.room.theme);
+  const [isTimerGoing, setIsTimerGoing] = useState(false);
+  const [isworking, setIsworking] = useState();
+  const [worktime, setWorktime] = useState(props.room.worktime);
+  const [breaktime, setBreaktime] = useState(props.room.breaktime);
+  const [[mins, secs], setTime] = useState([0, worktime]);
+
+  const toggleIsWorking = () => {
+    axios
+      .put(`${URI}/rooms/isworking/${roomName}`)
+      .then((res) => {
+        if (res.status === 200 && res.data[0]) {
+          setIsworking(res.data[0].isworking);
+          setIsTimerGoing(false);
+        }
+      })
+      .catch((error) => {
+        console.log("Error", error);
+      });
+    return false;
+  };
+
+  useEffect(() => {
+    setRoomTheme(props.room.theme);
+  }, [props.room]);
+
+  useEffect(() => {
+    setTime([0, worktime]);
+  }, [worktime]);
+
+  useEffect(() => {
+    setTime([0, breaktime]);
+  }, [breaktime]);
+
+  useEffect(() => {
+    if (isworking) {
+      setTime([0, worktime]);
+      setRoomTheme("dark");
+    } else {
+      setTime([0, breaktime]);
+      setRoomTheme(props.room.theme);
+    }
+  }, [isworking]);
+
+  useEffect(() => {
+    setWorktime(props.room.worktime);
+    setBreaktime(props.room.breaktime);
+  }, [props.room]);
+
+  const tick = () => {
+    if (mins === 0 && secs === 0) {
+      toggleIsWorking();
+    } else if (secs === 0) {
+      setTime([mins - 1, 59]);
+    } else {
+      setTime([mins, secs - 1]);
+    }
+  };
+
+  useEffect(() => {
+    if (isTimerGoing) {
+      const timerId = setInterval(() => tick(), 1000);
+      return () => clearInterval(timerId);
+    }
+  });
 
   return (
     <>
@@ -29,16 +98,20 @@ export default function Room(props) {
                 color: theme.palette[roomTheme].text.secondary,
               }}
             >
-              BREAK TIME
+              {isworking ? "WORK TIME" : "BREAK TIME"}
             </Typography>
-            <Typography
-              variant="display"
-              style={{ color: "white", marginBottom: "60px" }}
+            <Typography variant="display" style={{ color: "white" }}>
+              {`${mins.toString().padStart(2, "0")}:${secs
+                .toString()
+                .padStart(2, "0")}`}
+            </Typography>
+
+            <Button
+              buttontheme={roomTheme}
+              onClick={() => setIsTimerGoing(!isTimerGoing)}
+              sx={{ width: "180px", marginTop: "60px" }}
             >
-              {worktime}:00
-            </Typography>
-            <Button buttontheme={roomTheme} sx={{ width: "180px" }}>
-              Start
+              {isTimerGoing ? "Pause" : "Start"}
             </Button>
           </Stack>
         </RoomContainer>
@@ -102,7 +175,7 @@ const LeftFloatingSide = ({ roomTheme, roomName, roomId }) => {
       </BgOffsetBox>
       <BgOffsetBox spacing={1} roomTheme={roomTheme}>
         <Typography variant="body2bold">Tasks</Typography>
-        <OwnTasksBox />
+        <OwnTasksBox roomTheme={roomTheme} />
       </BgOffsetBox>
     </Stack>
   );

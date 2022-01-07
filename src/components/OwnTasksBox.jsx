@@ -10,12 +10,12 @@ import { theme } from "../theme";
 import { Button } from "@mui/material";
 import { styled } from "@mui/material";
 
-const roomTheme = localStorage.getItem("currTheme");
+// const roomTheme = localStorage.getItem("currTheme");
 const userId = localStorage.getItem("userid")
   ? localStorage.getItem("userid")
   : 0;
 
-export default function OwnTasksBox() {
+export default function OwnTasksBox({ roomTheme }) {
   const [tasks, setTasks] = useState();
   const [isAddingTask, setIsAddingTask] = useState(false);
   const [taskName, setTaskName] = useState("");
@@ -23,17 +23,7 @@ export default function OwnTasksBox() {
   const onTaskFieldChange = (e) => setTaskName(e.target.value);
 
   useEffect(() => {
-    function x() {
-      const newTheme = localStorage.getItem("currTheme");
-
-      if (newTheme) {
-        console.log("NEW THEME", newTheme);
-      }
-    }
-    window.addEventListener("storage", x);
-    if (userId !== 0) {
-      getUserTasks(userId);
-    }
+    getUserTasks();
   }, []);
 
   const getUserTasks = () => {
@@ -83,6 +73,7 @@ export default function OwnTasksBox() {
         <div>
           {tasks.map((task, index) => (
             <OwnTask
+              roomTheme={roomTheme}
               key={task.taskid}
               toggleTask={toggleTask}
               done={task.state}
@@ -148,11 +139,12 @@ export default function OwnTasksBox() {
 const OwnTask = (props) => {
   return (
     <Stack direction="row" spacing={1}>
-      {roomTheme && (
+      {props.roomTheme && (
         <div style={{ width: "24px" }}>
           <StyledCheckIcon
             icon="check-circle"
             size="24"
+            roomTheme={props.roomTheme}
             done={props.done}
             onClick={() => props.toggleTask(props.taskId, props.index)}
           />
@@ -169,8 +161,8 @@ const OwnTask = (props) => {
 };
 
 const StyledCheckIcon = styled(FeatherIcon, {
-  shouldForwardProp: (prop) => prop != "done",
-})(({ done }) => ({
+  shouldForwardProp: (prop) => prop != "done" || prop != "roomTheme",
+})(({ done, roomTheme }) => ({
   color: done ? "white" : theme.palette[roomTheme].text.secondary,
   "&:hover": {
     transition: "200ms ease-in-out",
