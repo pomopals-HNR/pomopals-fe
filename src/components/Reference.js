@@ -1,6 +1,7 @@
 import React from "react";
 import { Typography as Type } from "@mui/material";
 import { theme } from "../theme";
+import Button from "../components/Button";
 
 export default function Reference() {
   return (
@@ -40,7 +41,7 @@ export default function Reference() {
         </div>
       </div>
 
-      <Type variant="timer">Timer text</Type>
+      <Type variant="display">Display text (landing page, timer)</Type>
       <Type variant="h1">Heading 1</Type>
       <Type variant="h2">Heading 2</Type>
       <Type variant="h3">Heading 3</Type>
@@ -52,6 +53,9 @@ export default function Reference() {
       <Type variant="body3bold">Body 3 Bold</Type>
       <Type variant="caption">caption</Type>
       <Type variant="tiny">tiny</Type>
+      <br></br>
+
+      <Button currTheme="blue">Hello</Button>
     </div>
   );
 }
