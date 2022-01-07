@@ -106,7 +106,7 @@ export default function RoomLayout(props) {
 
   return (
     <>
-      {roomTheme && (
+      {room && roomTheme && (
         <div>
           <AppBar position="fixed" open={open} roomtheme={roomTheme}>
             <Toolbar

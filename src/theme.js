@@ -140,6 +140,10 @@ const typography = {
   body2: {
     fontSize: 16,
   },
+  body2italic: {
+    fontSize: 16,
+    fontStyle: "italic",
+  },
   body2bold: {
     fontSize: 16,
     fontWeight: 600,

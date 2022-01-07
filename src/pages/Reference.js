@@ -55,7 +55,7 @@ export default function Reference() {
       <Type variant="tiny">tiny</Type>
       <br></br>
 
-      <Button currTheme="blue">Hello</Button>
+      <Button buttontheme="blue">Hello</Button>
     </div>
   );
 }

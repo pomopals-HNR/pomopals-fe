@@ -3,13 +3,13 @@ import ButtonUnstyled from "@mui/base/ButtonUnstyled";
 import { styled } from "@mui/system";
 
 const CustomButtonRoot = styled(ButtonUnstyled, {
-  shouldForwardProp: (prop) => prop !== "currTheme",
-})(({ theme, currTheme }) => ({
+  shouldForwardProp: (prop) => prop !== "buttontheme",
+})(({ theme, buttontheme }) => ({
   fontWeight: 600,
   fontSize: 16,
   backgroundColor: "#fff",
-  color: theme.palette[currTheme].active,
-  boxShadow: `0 4px 0 0 ${theme.palette[currTheme].active}`,
+  color: theme.palette[buttontheme].active,
+  boxShadow: `0 4px 0 0 ${theme.palette[buttontheme].active}`,
   padding: "12px 24px",
   borderRadius: 5,
   transition: "all 150ms ease",

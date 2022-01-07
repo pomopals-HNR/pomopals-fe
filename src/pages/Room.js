@@ -37,7 +37,7 @@ export default function Room(props) {
             >
               {worktime}:00
             </Typography>
-            <Button currTheme={roomTheme} style={{ width: "180px" }}>
+            <Button buttontheme={roomTheme} sx={{ width: "180px" }}>
               Start
             </Button>
           </Stack>

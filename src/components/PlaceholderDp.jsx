@@ -14,5 +14,5 @@ const StyledDp = styled.div`
 `;
 
 export default function PlaceholderDp({ initial }) {
-  return <StyledDp>{initial}</StyledDp>;
+  return <StyledDp>{initial.charAt(0).toUpperCase()}</StyledDp>;
 }

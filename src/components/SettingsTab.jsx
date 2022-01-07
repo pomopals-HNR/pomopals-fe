@@ -27,7 +27,6 @@ export default function SettingsTab(props) {
         theme: roomTheme,
       })
       .then((res) => {
-        console.log("SUCCESSFULLY UPDATED", res.data[0]);
         props.setRoom(res.data[0]);
       });
   };
@@ -72,7 +71,9 @@ export default function SettingsTab(props) {
             value={worktime}
             variant="outlined"
             onChange={onWorktimeChange}
-            sx={{ backgroundColor: `${roomTheme}.bg` }}
+            sx={{
+              backgroundColor: `${roomTheme}.bg`,
+            }}
           />
           <TextField
             id="filled-basic"
@@ -81,7 +82,10 @@ export default function SettingsTab(props) {
             value={breaktime}
             variant="outlined"
             onChange={onBreaktimeChange}
-            sx={{ backgroundColor: `${roomTheme}.bg` }}
+            sx={{
+              backgroundColor: `${roomTheme}.bg`,
+              color: roomTheme === "dark" ? "#fff" : "#353535",
+            }}
           />
         </Stack>
         <Divider />
@@ -134,7 +138,7 @@ export default function SettingsTab(props) {
         </Stack>
       </Stack>
 
-      <Button currTheme={roomTheme} onClick={handleSubmit}>
+      <Button buttontheme={roomTheme} onClick={handleSubmit}>
         Save Changes
       </Button>
     </Stack>
