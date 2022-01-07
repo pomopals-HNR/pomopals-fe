@@ -53,6 +53,7 @@ const RoomContainer = styled("div", {
   backgroundColor: theme.palette[roomTheme].bg,
   width: "100vw",
   height: "100vh",
+  overflow: "hidden",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
