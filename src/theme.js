@@ -1,54 +1,4 @@
 import { createTheme } from "@mui/material/styles";
-import CerebriSansBook from "./assets/fonts/CerebriSans-Book.ttf";
-import CerebriSansMedium from "./assets/fonts/CerebriSans-Medium.ttf";
-import CerebriSansBold from "./assets/fonts/CerebriSans-Bold.ttf";
-import CerebriSansItalic from "./assets/fonts/CerebriSans-Italic.ttf";
-import CerebriSansMediumItalic from "./assets/fonts/CerebriSans-MediumItalic.ttf";
-
-const fontStyleOverrides = `@font-face {
-          font-family: 'CerebriSans';
-          font-style: normal;
-          font-display: swap;
-          font-weight: 400;
-          src: url(${CerebriSansBook}) format('ttf');
-          unicodeRange: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF;
-        }
-
-        @font-face {
-          font-family: 'CerebriSans';
-          font-style: normal;
-          font-display: swap;
-          font-weight: 500;
-          src: local('CerebriSans'), local('CerebriSans-Medium'), url(${CerebriSansMedium}) format('ttf');
-          unicodeRange: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF;
-        }
-
-        @font-face {
-          font-family: 'CerebriSans';
-          font-style: normal;
-          font-display: swap;
-          font-weight: 600;
-          src: local('CerebriSans'), local('CerebriSans-Bold'), url(${CerebriSansBold}) format('ttf');
-          unicodeRange: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF;
-        }
-
-        @font-face {
-          font-family: 'CerebriSans';
-          font-style: italic;
-          font-display: swap;
-          font-weight: 400;
-          src: local('CerebriSans'), local('CerebriSans-Italic'), url(${CerebriSansItalic}) format('ttf');
-          unicodeRange: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF;
-        }
-
-        @font-face {
-          font-family: 'CerebriSans';
-          font-style: italic;
-          font-display: swap;
-          font-weight: 500;
-          src: local('CerebriSans'), local('CerebriSans-MediumItalic'), url(${CerebriSansMediumItalic}) format('ttf');
-          unicodeRange: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF;
-        }`;
 
 const palette = {
   primary: {
@@ -167,16 +117,10 @@ const typography = {
   },
   tiny: {
     fontSize: 10,
-    // fontWeight: 600,
   },
 };
 
 export const theme = createTheme({
   palette: palette,
   typography: typography,
-  // components: {
-  //   MuiCssBaseline: {
-  //     styleOverrides: fontStyleOverrides,
-  //   },
-  // },
 });
