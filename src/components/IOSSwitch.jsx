@@ -54,10 +54,11 @@ const StyledIOSSwitch = styled((props) => (
   },
 }));
 
-export default function IOSSwitch() {
+export default function IOSSwitch(props) {
   return (
     <FormControlLabel
-      control={<StyledIOSSwitch sx={{ m: 1 }} defaultChecked />}
+      {...props}
+      control={<StyledIOSSwitch sx={{ m: 1 }} />}
       label=""
     />
   );

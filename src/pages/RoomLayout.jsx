@@ -30,9 +30,6 @@ export default function RoomLayout(props) {
   const [room, setRoom] = useState();
 
   const [roomName, setRoomName] = useState(props.match.params.name);
-  const [roomId, setRoomId] = useState(0);
-  const [worktime, setWorktime] = useState();
-  const [breakTime, setBreakTime] = useState();
   const [roomTheme, setRoomTheme] = useState("");
 
   const userId = localStorage.getItem("userid")
@@ -42,6 +39,12 @@ export default function RoomLayout(props) {
   useEffect(() => {
     loadRoomData();
   }, [roomName, roomTheme]);
+
+  useEffect(() => {
+    if (room) {
+      setRoomTheme(room.theme);
+    }
+  }, [room]);
 
   const updateRoom = (worktime, breaktime, theme) => {
     axios
@@ -63,7 +66,6 @@ export default function RoomLayout(props) {
           if (res.data[0]) {
             const tempRoom = res.data[0];
             setRoomName(tempRoom.roomname);
-            setRoomId(tempRoom.roomid);
 
             if (tempRoom.theme === null) {
               setRoomTheme(getRandomTheme());
@@ -88,8 +90,6 @@ export default function RoomLayout(props) {
           }
           console.log(error.config);
         });
-    } else {
-      console.log("No url name");
     }
   };
 
@@ -158,9 +158,11 @@ export default function RoomLayout(props) {
             anchor="right"
             open={open}
           >
-            {currTab === 0 && <MemberTasksTab roomTheme={roomTheme} />}
-            {currTab === 1 && <ChatTab roomTheme={roomTheme} />}
-            {currTab === 2 && <SettingsTab roomTheme={roomTheme} />}
+            {currTab === 0 && <MemberTasksTab room={room} />}
+            {currTab === 1 && <ChatTab room={room} />}
+            {currTab === 2 && (
+              <SettingsTab setRoom={(room) => setRoom(room)} room={room} />
+            )}
           </Drawer>
         </div>
       )}

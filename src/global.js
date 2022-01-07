@@ -5,23 +5,23 @@ export const URI = "http://localhost:5000";
 export const themeColors = [
   {
     name: "purple",
-    theme: theme.palette.purple.bg,
+    theme: theme.palette.purple,
   },
   {
     name: "yellow",
-    theme: theme.palette.yellow.bg,
+    theme: theme.palette.yellow,
   },
   {
     name: "green",
-    theme: theme.palette.green.bg,
+    theme: theme.palette.green,
   },
   {
     name: "blue",
-    theme: theme.palette.blue.bg,
+    theme: theme.palette.blue,
   },
   {
     name: "dark",
-    theme: theme.palette.dark.bg,
+    theme: theme.palette.dark,
   },
 ];
 
