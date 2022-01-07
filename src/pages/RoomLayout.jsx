@@ -1,5 +1,5 @@
 import * as React from "react";
-import { styled, useTheme } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 import Drawer from "@mui/material/Drawer";
 import MuiAppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -8,26 +8,14 @@ import Room from "./Room";
 import FeatherIcon from "feather-icons-react";
 import SettingsTab from "../components/SettingsTab";
 
-const roomTheme = "purple";
+const roomTheme = "green";
 const drawerWidth = 310;
 
 const tabs = [
-  {
-    name: "Member Tasks",
-    icon: "check-circle",
-  },
-  {
-    name: "Chat",
-    icon: "message-circle",
-  },
-  {
-    name: "Room Settings",
-    icon: "sliders",
-  },
-  {
-    name: "Log Out",
-    icon: "log-out",
-  },
+  { name: "Member Tasks", icon: "check-circle" },
+  { name: "Chat", icon: "message-circle" },
+  { name: "Room Settings", icon: "sliders" },
+  { name: "Log Out", icon: "log-out" },
 ];
 
 export default function RoomLayout(props) {

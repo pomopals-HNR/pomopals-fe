@@ -5,7 +5,6 @@ import { ThemeProvider } from "@mui/material/styles";
 import { CssBaseline } from "@mui/material";
 import LandingPage from "./pages/LandingPage";
 import RoomLayout from "./pages/RoomLayout";
-import Navbar from "./components/Navbar";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { URI } from "./global";
@@ -46,7 +45,6 @@ function App() {
     <BrowserRouter>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        {/* <Navbar currentUser={currentUser} onUpdate={setUserId} /> */}
         <Route
           exact
           path="/"

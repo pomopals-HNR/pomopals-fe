@@ -96,7 +96,7 @@ const BgOffsetBox = styled(Stack, {
   padding: "12px",
   width: "230px",
   borderRadius: "8px",
-  color: roomTheme == "dark" ? "white" : "#353535",
+  color: roomTheme === "dark" ? "white" : "#353535",
 }));
 
 const RoomMember = ({ name }) => {
