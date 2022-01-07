@@ -4,7 +4,7 @@ import { styled } from "@mui/material/styles";
 import { theme } from "../theme";
 import Button from "../components/Button";
 import PlaceholderDp from "../components/PlaceholderDp";
-import FeatherIcon from "feather-icons-react";
+import OwnTasksBox from "../components/OwnTasksBox";
 
 export default function Room(props) {
   const roomTheme = props.room.theme;
@@ -102,20 +102,8 @@ const LeftFloatingSide = ({ roomTheme, roomName, roomId }) => {
       </BgOffsetBox>
       <BgOffsetBox spacing={1} roomTheme={roomTheme}>
         <Typography variant="body2bold">Tasks</Typography>
-        <OwnTask done={true} task="I am a task" />
-        <OwnTask done={true} task="I too am another task to be completed." />
+        <OwnTasksBox />
       </BgOffsetBox>
-    </Stack>
-  );
-};
-
-const OwnTask = ({ done, task }) => {
-  return (
-    <Stack direction="row" spacing={1}>
-      <div style={{ width: "18px" }}>
-        <FeatherIcon icon="check-circle" size="18" />
-      </div>
-      <Typography variant="body2">{task}</Typography>
     </Stack>
   );
 };

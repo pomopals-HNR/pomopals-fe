@@ -89,6 +89,7 @@ export default function RoomLayout(props) {
               setRoomTheme(tempRoom.theme);
               setRoom(tempRoom);
             }
+            localStorage.setItem("currTheme", roomTheme);
           } else {
             alert("room does not exist!");
           }
