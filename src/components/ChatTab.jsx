@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Stack } from "@mui/material";
 import { Divider } from "@mui/material";
 import { Typography } from "@mui/material";
@@ -9,6 +9,9 @@ var roomTheme;
 
 export default function ChatTab(props) {
   roomTheme = props.room.theme;
+  var messages = props.messages;
+
+  const [text, setText] = useState("");
 
   return (
     <Stack
@@ -40,10 +43,33 @@ export default function ChatTab(props) {
             username="tiffany"
             message="Look at me I’m a beautiful butterfly Fluttering in the moonlight 😀"
           />
-          <ChatMessage isUserMsg={false} message="Lawson left the room." />
+          {/* <ChatMessage isUserMsg={false} message="Lawson left the room." /> */}
+          {messages.map((m) => {
+            return (
+              <ChatMessage
+                isUserMsg={m.isUserMsg}
+                username={m.username}
+                message={m.message}
+              />
+            );
+          })}
         </Stack>
       </Stack>
-      Input field here
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          props.onSend(text);
+          setText("");
+        }}
+      >
+        <input
+          type="text"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          placeholder="Say something..."
+        ></input>
+        <input type="submit" value="Send" />
+      </form>
     </Stack>
   );
 }
@@ -78,7 +104,7 @@ const ChatMessage = ({ isUserMsg, username, message, date }) => {
           alignItems="center"
           sx={{ width: "100%", color: theme.palette[roomTheme].text.secondary }}
         >
-          <Typography variant="body2italic">{message}</Typography>
+          <Typography variant="body2italic">{`${username} ${message}`}</Typography>
           <Typography variant="tiny">today at 9:42pm</Typography>
         </Stack>
       )}

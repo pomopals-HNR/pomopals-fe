@@ -15,8 +15,10 @@ import ChatTab from "../components/ChatTab";
 import { theme } from "../theme";
 import { getRandomTheme } from "../global";
 import Modal from "../components/Modal";
+import { io } from "socket.io-client";
 
 const drawerWidth = 310;
+const socket = io.connect("http://localhost:5000");
 
 const tabs = [
   { name: "Member Tasks", icon: "check-circle" },
@@ -34,6 +36,9 @@ export default function RoomLayout(props) {
   const [roomName, setRoomName] = useState(props.match.params.name);
   const [roomTheme, setRoomTheme] = useState("");
   const [guestName, setGuestName] = useState("");
+  const [userName, setUserName] = useState("");
+
+  const [messages, setMessages] = useState([]);
 
   const userId = localStorage.getItem("userid")
     ? localStorage.getItem("userid")
@@ -42,6 +47,8 @@ export default function RoomLayout(props) {
   useEffect(() => {
     if (!localStorage.getItem("name")) {
       setModalOpen(true);
+    } else {
+      setUserName(localStorage.getItem("name"));
     }
   }, []);
 
@@ -54,6 +61,27 @@ export default function RoomLayout(props) {
       setRoomTheme(room.theme);
     }
   }, [room]);
+
+  useEffect(() => {
+    if (userName) {
+      socket.emit(
+        "joinRoom",
+        {
+          username: userName,
+          roomName: roomName,
+        },
+        () => {
+          newSystemMessage(userName, "has joined the room");
+        }
+      );
+      socket.on("promptJoin", (message) => {
+        newSystemMessage(message.username, "has joined the room");
+      });
+      socket.on("receiveMessage", (message) => {
+        newUserMessage(message.username, message.content);
+      });
+    }
+  }, [userName]);
 
   const updateRoom = (worktime, breaktime, theme) => {
     axios
@@ -102,7 +130,63 @@ export default function RoomLayout(props) {
     }
   };
 
+  const createGuest = (username) => {
+    if (username) {
+      axios
+        .post(`${URI}/guest-login/${username}`)
+        .then((res) => {
+          if (res.data) {
+            console.log(res.data);
+            localStorage.setItem("userid", res.data);
+          }
+        })
+        .catch(function (error) {
+          if (error.response) {
+            console.log(error.response.data);
+          } else if (error.request) {
+            console.log(error.request);
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log("Error", error.message);
+          }
+          console.log(error.config);
+        });
+    }
+  };
+
   const history = useHistory();
+
+  const newSystemMessage = (username, message) => {
+    const m = {
+      isUserMsg: false,
+      username: username,
+      message: message,
+    };
+    setMessages((oldMsg) => [...oldMsg, m]);
+  };
+
+  const newUserMessage = (username, message) => {
+    const m = {
+      isUserMsg: true,
+      username: username,
+      message: message,
+    };
+    setMessages((oldMsg) => [...oldMsg, m]);
+  };
+
+  const sendMessage = (content) => {
+    socket.emit(
+      "sendMessage",
+      {
+        username: userName,
+        roomName: roomName,
+        content: content,
+      },
+      () => {
+        newUserMessage(userName, content);
+      }
+    );
+  };
 
   const handleDrawerOpen = (index) => {
     setCurrTab(index);
@@ -118,7 +202,9 @@ export default function RoomLayout(props) {
   };
 
   const handleModalClose = () => {
+    createGuest(guestName);
     localStorage.setItem("name", guestName);
+    setUserName(guestName);
     setModalOpen(false);
   };
 
@@ -152,7 +238,11 @@ export default function RoomLayout(props) {
                   edge="end"
                   onClick={
                     tab.name === "Log Out"
-                      ? () => history.push("/")
+                      ? () => {
+                          socket.disconnect();
+                          history.push("/");
+                          socket.connect();
+                        }
                       : () => handleDrawerOpen(index)
                   }
                   style={{ width: "48px", height: "48px", marginBottom: "8px" }}
@@ -170,7 +260,9 @@ export default function RoomLayout(props) {
                   open={modalOpen}
                   handleClose={handleModalClose}
                   roomName={roomName}
-                  setGuestName={(name) => setGuestName(name)}
+                  setGuestName={(name) => {
+                    setGuestName(name);
+                  }}
                 />
               </>
             )}
@@ -189,7 +281,9 @@ export default function RoomLayout(props) {
             open={drawerOpen}
           >
             {currTab === 0 && <MemberTasksTab room={room} />}
-            {currTab === 1 && <ChatTab room={room} />}
+            {currTab === 1 && (
+              <ChatTab room={room} messages={messages} onSend={sendMessage} />
+            )}
             {currTab === 2 && (
               <SettingsTab setRoom={(room) => setRoom(room)} room={room} />
             )}
