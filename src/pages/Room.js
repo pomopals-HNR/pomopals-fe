@@ -7,6 +7,7 @@ import Button from "../components/Button";
 import axios from "axios";
 import { URI } from "../global";
 import PlaceholderDp from "../components/PlaceholderDp";
+import FeatherIcon from "feather-icons-react";
 import OwnTasksBox from "../components/OwnTasksBox";
 import CountdownTimer from "../components/CountdownTimer";
 
@@ -14,6 +15,7 @@ export default function Room(props) {
   //   const roomTheme = props.room.theme;
   const roomName = props.urlName;
   const roomId = props.room.roomid;
+  const [users, setUsers] = useState(props.room.users);
 
   const [roomTheme, setRoomTheme] = useState(props.room.theme);
   const [isTimerGoing, setIsTimerGoing] = useState(false);
@@ -89,6 +91,7 @@ export default function Room(props) {
             roomTheme={roomTheme}
             roomName={roomName}
             roomId={roomId}
+            users={users}
           />
           <Stack direction="column" alignItems="center">
             <Typography
@@ -142,17 +145,23 @@ const BgOffsetBox = styled(Stack, {
   color: roomTheme === "dark" ? "white" : "#353535",
 }));
 
-const RoomMember = ({ name }) => {
+const RoomMember = ({ user }) => {
   return (
     <Stack direction="row" spacing={1} alignItems="center">
-      {/* TODO: Add condition to check if dp exists */}
-      <PlaceholderDp initial={name.charAt(0)} />
-      <Typography variant="body3medium">{name}</Typography>
+      {user.profilepicture && (
+        <img
+          src={user.profilepicture}
+          alt="profilepicture"
+          style={{ width: "32px", height: "32px", borderRadius: "50%" }}
+        ></img>
+      )}
+      {!user.profilepicture && <PlaceholderDp initial={user.name.charAt(0)} />}
+      <Typography variant="body3medium">{user.name}</Typography>
     </Stack>
   );
 };
 
-const LeftFloatingSide = ({ roomTheme, roomName, roomId }) => {
+const LeftFloatingSide = ({ roomTheme, roomName, roomId, users }) => {
   return (
     <Stack
       spacing={2}
@@ -169,9 +178,12 @@ const LeftFloatingSide = ({ roomTheme, roomName, roomId }) => {
       </Typography>
       <Typography variant="tiny">{roomId}</Typography>
       <BgOffsetBox spacing={1} roomTheme={roomTheme}>
-        <RoomMember name="Tiffany" />
+        {users.map((user) => {
+          return <RoomMember user={user} />;
+        })}
+        {/* <RoomMember name="Tiffany" />
         <RoomMember name="Lawson" />
-        <RoomMember name="Lala" />
+        <RoomMember name="Lala" /> */}
       </BgOffsetBox>
       <BgOffsetBox spacing={1} roomTheme={roomTheme}>
         <Typography variant="body2bold">Tasks</Typography>
