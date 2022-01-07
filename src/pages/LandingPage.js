@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import styled from "@emotion/styled";
-import { Typography as Text } from "@mui/material";
+import { Stack, Typography as Text } from "@mui/material";
 import { theme } from "../theme";
 import heroTomato from "../assets/heroTomato.png";
 import { useHistory } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import IconButton from "@mui/material/IconButton";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import InputAdornment from "@mui/material/InputAdornment";
+import FeatherIcon from "feather-icons-react";
 
 export default function LandingPage(props) {
   const [roomName, setRoomName] = useState("");
@@ -33,31 +37,59 @@ export default function LandingPage(props) {
             <span style={{ color: theme.palette.primary.main }}>pomodoro</span>{" "}
             timer for remote teams.
           </Text>
-          <Text variant="caption">create your shareable link</Text>
-          {/* <div
-            style={{
-              height: "50px",
-              backgroundColor: "white",
-              width: "600px",
-              borderRadius: "999px",
-              marginTop: "16px",
-            }}
-          ></div> */}
-          <div>
-            <input
+          <Stack spacing={2}>
+            <Text variant="caption">create your shareable link</Text>
+            <OutlinedInput
+              id="outlined-adornment-weight"
+              sx={{
+                borderRadius: "99px",
+                width: "500px",
+                backgroundColor: "white",
+                height: "52px",
+              }}
               onChange={(e) => {
                 setRoomName(e.target.value);
                 console.log(userId);
               }}
-            />
-            <button
-              onClick={() => {
-                history.push(`room/${roomName}`);
+              placeholder="Enter your session name"
+              startAdornment={
+                <InputAdornment position="start">
+                  <span
+                    style={{
+                      color: theme.palette.primary.main,
+                      userSelect: "none",
+                    }}
+                  >
+                    pomopals.com/
+                  </span>
+                </InputAdornment>
+              }
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={() => {
+                      history.push(`room/${roomName}`);
+                    }}
+                    style={{
+                      width: "36px",
+                      height: "36px",
+                      backgroundColor: theme.palette.primary.main,
+                      borderRadius: "50%",
+                    }}
+                  >
+                    <FeatherIcon
+                      icon="arrow-right"
+                      style={{ color: "white" }}
+                    />
+                  </IconButton>
+                </InputAdornment>
+              }
+              aria-describedby="outlined-weight-helper-text"
+              inputProps={{
+                "aria-label": "weight",
               }}
-            >
-              Join Room
-            </button>
-          </div>
+            />
+          </Stack>
         </div>
         <div className="heroImage">
           <img src={heroTomato} />
@@ -76,7 +108,7 @@ export default function LandingPage(props) {
 const HeroContainer = styled.section`
   margin: 0 7.5vw;
   color: #fff;
-  min-height: calc(100vh - 0px);
+  min-height: calc(100vh - 87.36px);
 
   .heroTitle {
     width: 75%;
@@ -98,6 +130,8 @@ const HeroContainer = styled.section`
   .heroImage img {
     width: 100%;
     z-index: 9;
+    bottom: 0;
+    position: absolute;
   }
 
   @media (max-width: 600px) {

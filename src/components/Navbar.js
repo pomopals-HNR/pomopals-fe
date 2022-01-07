@@ -66,7 +66,7 @@ export default function Navbar(props) {
           onSuccess={handleLogin}
           onFailure={handleFailure}
           cookiePolicy={"single_host_origin"}
-          render={(renderProps) => <Button currTheme="dark">log in</Button>}
+          // render={(renderProps) => <Button currTheme="dark">log in</Button>}
         />
       </div>
       {/* <GoogleLogin
