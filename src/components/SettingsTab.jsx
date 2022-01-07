@@ -69,6 +69,7 @@ export default function SettingsTab(props) {
             label="Work"
             size="small"
             value={worktime}
+            type="number"
             variant="outlined"
             onChange={onWorktimeChange}
             sx={{
@@ -79,6 +80,7 @@ export default function SettingsTab(props) {
             id="filled-basic"
             label="Break"
             size="small"
+            type="number"
             value={breaktime}
             variant="outlined"
             onChange={onBreaktimeChange}

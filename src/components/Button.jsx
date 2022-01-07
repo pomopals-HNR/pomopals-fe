@@ -8,6 +8,7 @@ const CustomButtonRoot = styled(ButtonUnstyled, {
   fontWeight: 600,
   fontSize: 16,
   backgroundColor: "#fff",
+  fontFamily: "CerebriSans",
   color: theme.palette[buttontheme].active,
   boxShadow: `0 4px 0 0 ${theme.palette[buttontheme].active}`,
   padding: "12px 24px",

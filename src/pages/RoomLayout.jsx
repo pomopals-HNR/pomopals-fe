@@ -14,6 +14,7 @@ import { useHistory } from "react-router-dom";
 import ChatTab from "../components/ChatTab";
 import { theme } from "../theme";
 import { getRandomTheme } from "../global";
+import Modal from "../components/Modal";
 
 const drawerWidth = 310;
 
@@ -25,16 +26,24 @@ const tabs = [
 ];
 
 export default function RoomLayout(props) {
-  const [open, setOpen] = React.useState(false);
+  const [drawerOpen, setDrawerOpen] = React.useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+
   const [currTab, setCurrTab] = React.useState(1);
   const [room, setRoom] = useState();
-
   const [roomName, setRoomName] = useState(props.match.params.name);
   const [roomTheme, setRoomTheme] = useState("");
+  const [guestName, setGuestName] = useState("");
 
   const userId = localStorage.getItem("userid")
     ? localStorage.getItem("userid")
     : 0;
+
+  useEffect(() => {
+    if (!localStorage.getItem("name")) {
+      setModalOpen(true);
+    }
+  }, []);
 
   useEffect(() => {
     loadRoomData();
@@ -97,18 +106,31 @@ export default function RoomLayout(props) {
 
   const handleDrawerOpen = (index) => {
     setCurrTab(index);
-    setOpen(true);
+    setDrawerOpen(true);
   };
 
   const handleDrawerClose = () => {
-    setOpen(false);
+    setDrawerOpen(false);
+  };
+
+  const handleModalOpen = () => {
+    setModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    localStorage.setItem("name", guestName);
+    setModalOpen(false);
   };
 
   return (
     <>
       {room && roomTheme && (
         <div>
-          <AppBar position="fixed" open={open} roomtheme={roomTheme}>
+          <AppBar
+            position="fixed"
+            drawerOpen={drawerOpen}
+            roomtheme={roomTheme}
+          >
             <Toolbar
               style={{
                 flexDirection: "column",
@@ -119,7 +141,7 @@ export default function RoomLayout(props) {
               {tabs.map((tab, index) => (
                 <IconButton
                   sx={{
-                    ...(open &&
+                    ...(drawerOpen &&
                       currTab === index && {
                         backgroundColor: theme.palette[roomTheme].active,
                       }),
@@ -140,9 +162,17 @@ export default function RoomLayout(props) {
               ))}
             </Toolbar>
           </AppBar>
-          <Main onClick={handleDrawerClose} open={open}>
+          <Main onClick={handleDrawerClose} drawerOpen={drawerOpen}>
             {room && roomTheme && (
-              <Room urlName={props.match.params.name} room={room} />
+              <>
+                <Room urlName={props.match.params.name} room={room} />
+                <Modal
+                  open={modalOpen}
+                  handleClose={handleModalClose}
+                  roomName={roomName}
+                  setGuestName={(name) => setGuestName(name)}
+                />
+              </>
             )}
           </Main>
           <Drawer
@@ -156,7 +186,7 @@ export default function RoomLayout(props) {
             }}
             variant="persistent"
             anchor="right"
-            open={open}
+            open={drawerOpen}
           >
             {currTab === 0 && <MemberTasksTab room={room} />}
             {currTab === 1 && <ChatTab room={room} />}
@@ -170,27 +200,27 @@ export default function RoomLayout(props) {
   );
 }
 
-const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
-  ({ theme, open }) => ({
-    flexGrow: 1,
+const Main = styled("main", {
+  shouldForwardProp: (prop) => prop !== "drawerOpen",
+})(({ theme, drawerOpen }) => ({
+  flexGrow: 1,
+  transition: theme.transitions.create("margin", {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  marginRight: -drawerWidth,
+  ...(drawerOpen && {
     transition: theme.transitions.create("margin", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
     }),
-    marginRight: -drawerWidth,
-    ...(open && {
-      transition: theme.transitions.create("margin", {
-        easing: theme.transitions.easing.easeOut,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-      marginRight: 0,
-    }),
-  })
-);
+    marginRight: 0,
+  }),
+}));
 
 const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== "open" || prop !== "roomtheme",
-})(({ theme, open, roomtheme }) => ({
+  shouldForwardProp: (prop) => prop !== "drawerOpen" || prop !== "roomtheme",
+})(({ theme, drawerOpen, roomtheme }) => ({
   position: "absolute",
   right: "0",
   width: "auto",
@@ -209,7 +239,7 @@ const AppBar = styled(MuiAppBar, {
   "&:hover": {
     backgroundColor: theme.palette[roomtheme].bgOffset,
   },
-  ...(open && {
+  ...(drawerOpen && {
     backgroundColor: theme.palette[roomtheme].bgOffset,
     transition: theme.transitions.create(["margin", "width"], {
       easing: theme.transitions.easing.easeOut,
