@@ -49,7 +49,6 @@ export default function LandingPage(props) {
               }}
               onChange={(e) => {
                 setRoomName(e.target.value);
-                console.log(userId);
               }}
               placeholder="Enter your session name"
               startAdornment={

@@ -37,6 +37,7 @@ export default function RoomLayout(props) {
   const [roomTheme, setRoomTheme] = useState("");
   const [guestName, setGuestName] = useState("");
   const [userName, setUserName] = useState("");
+  const [users, setUsers] = useState([]);
 
   const [messages, setMessages] = useState([]);
 
@@ -100,9 +101,10 @@ export default function RoomLayout(props) {
       axios
         .post(`${URI}/rooms/${userId}/${roomName}`)
         .then((res) => {
-          if (res.data[0]) {
-            const tempRoom = res.data[0];
+          if (res.data) {
+            const tempRoom = res.data;
             setRoomName(tempRoom.roomname);
+            setUsers(res.data.users);
 
             if (tempRoom.theme === null) {
               setRoomTheme(getRandomTheme());
