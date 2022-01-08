@@ -68,6 +68,7 @@ export default function RoomLayout(props) {
 
   useEffect(() => {
     if (userName) {
+      insertUserToRoom(localStorage.getItem("userid"), roomName);
       socket.emit(
         "joinRoom",
         {
@@ -80,6 +81,7 @@ export default function RoomLayout(props) {
       );
       socket.on("promptJoin", (message) => {
         newSystemMessage(message.username, "has joined the room");
+        newUser(message.username);
       });
       socket.on("receiveMessage", (message) => {
         newUserMessage(message.username, message.content);
@@ -97,6 +99,10 @@ export default function RoomLayout(props) {
       .then((res) => {
         setRoom(res.data[0]);
       });
+  };
+
+  const insertUserToRoom = (userid, roomname) => {
+    axios.post(`${URI}/rooms/join/${userid}/${roomName}`);
   };
 
   const loadRoomData = () => {
@@ -181,6 +187,13 @@ export default function RoomLayout(props) {
     setMessages((oldMsg) => [...oldMsg, m]);
   };
 
+  const newUser = (user) => {
+    const u = {
+      name: user,
+    };
+    setUsers((oldUsers) => [...oldUsers, u]);
+  };
+
   const sendMessage = (content) => {
     socket.emit(
       "sendMessage",
@@ -258,7 +271,12 @@ export default function RoomLayout(props) {
           <Main onClick={handleDrawerClose} drawerOpen={drawerOpen}>
             {room && roomTheme && (
               <>
-                <Room urlName={props.match.params.name} room={room} />
+                <Room
+                  urlName={props.match.params.name}
+                  room={room}
+                  socket={socket}
+                  users={users}
+                />
                 <Modal
                   open={modalOpen}
                   handleClose={handleModalClose}

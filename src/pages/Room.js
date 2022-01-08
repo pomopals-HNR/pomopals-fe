@@ -11,7 +11,9 @@ export default function Room(props) {
   //   const roomTheme = props.room.theme;
   const roomName = props.urlName;
   const roomId = props.room.roomid;
-  const [users, setUsers] = useState(props.room.users);
+  // const [users, setUsers] = useState(props.room.users);
+  var users = props.users;
+  const socket = props.socket;
 
   const [roomTheme, setRoomTheme] = useState("dark");
   const [isTimerGoing, setIsTimerGoing] = useState(false);
@@ -39,6 +41,12 @@ export default function Room(props) {
   useEffect(() => {
     if (!isworking) setRoomTheme(props.room.theme);
   }, [props.room]);
+
+  useEffect(() => {
+    socket.on("startTimer", () => {
+      setIsTimerGoing(!isTimerGoing);
+    });
+  }, []);
 
   useEffect(() => {
     setTime([0, worktime]);
@@ -110,7 +118,11 @@ export default function Room(props) {
 
             <Button
               buttontheme={roomTheme}
-              onClick={() => setIsTimerGoing(!isTimerGoing)}
+              onClick={() => {
+                socket.emit("startTimer", roomName, () =>
+                  setIsTimerGoing(!isTimerGoing)
+                );
+              }}
               sx={{ width: "180px", marginTop: "60px" }}
             >
               {isTimerGoing ? "Pause" : "Start"}
