@@ -13,7 +13,7 @@ export default function Room(props) {
   const roomId = props.room.roomid;
   const [users, setUsers] = useState(props.room.users);
 
-  const [roomTheme, setRoomTheme] = useState(props.room.theme);
+  const [roomTheme, setRoomTheme] = useState("dark");
   const [isTimerGoing, setIsTimerGoing] = useState(false);
   const [isworking, setIsworking] = useState(true);
   const [worktime, setWorktime] = useState(props.room.worktime);
@@ -37,7 +37,7 @@ export default function Room(props) {
   //   };
 
   useEffect(() => {
-    setRoomTheme(props.room.theme);
+    if (!isworking) setRoomTheme(props.room.theme);
   }, [props.room]);
 
   useEffect(() => {
