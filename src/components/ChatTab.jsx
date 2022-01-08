@@ -1,9 +1,12 @@
 import React, { useState } from "react";
-import { Stack } from "@mui/material";
+import { IconButton, Stack } from "@mui/material";
 import { Divider } from "@mui/material";
 import { Typography } from "@mui/material";
 import PlaceholderDp from "./PlaceholderDp";
 import { theme } from "../theme";
+import { TextField } from "@mui/material";
+import { Box } from "@mui/material";
+import FeatherIcon from "feather-icons-react";
 
 var roomTheme;
 
@@ -28,21 +31,12 @@ export default function ChatTab(props) {
         <Divider />
 
         <Stack spacing={2}>
-          <ChatMessage
-            isUserMsg={true}
-            username="lalalawson"
-            message="im gna go sleep first"
-          />
-          <ChatMessage
-            isUserMsg={true}
-            username="yonggggler"
-            message="byebye lawson"
-          />
+          {/*
           <ChatMessage
             isUserMsg={true}
             username="tiffany"
             message="Look at me I’m a beautiful butterfly Fluttering in the moonlight 😀"
-          />
+          /> */}
           {/* <ChatMessage isUserMsg={false} message="Lawson left the room." /> */}
           {messages.map((m) => {
             return (
@@ -55,21 +49,42 @@ export default function ChatTab(props) {
           })}
         </Stack>
       </Stack>
-      <form
+
+      <Box
+        component="form"
         onSubmit={(e) => {
           e.preventDefault();
           props.onSend(text);
           setText("");
         }}
       >
-        <input
-          type="text"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          placeholder="Say something..."
-        ></input>
-        <input type="submit" value="Send" />
-      </form>
+        <Stack direction="row" spacing={1} alignItems="center">
+          <TextField
+            id="outlined-size-small"
+            size="small"
+            type="text"
+            color="dark"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            placeholder="Say something..."
+            sx={{
+              backgroundColor: `${roomTheme}.bg`,
+              fontSize: "12px",
+              color: roomTheme === "dark" ? "#fff" : "#353535",
+            }}
+          />
+          <IconButton
+            type="submit"
+            value="Send"
+            sx={{ backgroundColor: "white", width: "36px", height: "36px" }}
+          >
+            <FeatherIcon
+              icon="arrow-up"
+              style={{ color: theme.palette[roomTheme].active }}
+            />
+          </IconButton>
+        </Stack>
+      </Box>
     </Stack>
   );
 }
