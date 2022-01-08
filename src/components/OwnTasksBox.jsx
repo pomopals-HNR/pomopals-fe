@@ -41,7 +41,7 @@ export default function OwnTasksBox({ roomTheme }) {
     axios
       .put(`${URI}/tasks/${taskid}`)
       .then((res) => {
-        if (res.status == 200 && res.data[0]) {
+        if (res.status === 200 && res.data[0]) {
           let tempTasks = [...tasks];
           tempTasks[index] = res.data[0];
           setTasks(tempTasks);
@@ -161,7 +161,7 @@ const OwnTask = (props) => {
 };
 
 const StyledCheckIcon = styled(FeatherIcon, {
-  shouldForwardProp: (prop) => prop != "done" || prop != "roomTheme",
+  shouldForwardProp: (prop) => prop !== "done" || prop !== "roomTheme",
 })(({ done, roomTheme }) => ({
   color: done ? "white" : theme.palette[roomTheme].text.secondary,
   "&:hover": {

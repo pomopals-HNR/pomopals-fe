@@ -4,12 +4,8 @@ import { Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { theme } from "../theme";
 import Button from "../components/Button";
-import axios from "axios";
-import { URI } from "../global";
 import PlaceholderDp from "../components/PlaceholderDp";
-import FeatherIcon from "feather-icons-react";
 import OwnTasksBox from "../components/OwnTasksBox";
-import CountdownTimer from "../components/CountdownTimer";
 
 export default function Room(props) {
   //   const roomTheme = props.room.theme;
@@ -19,25 +15,26 @@ export default function Room(props) {
 
   const [roomTheme, setRoomTheme] = useState(props.room.theme);
   const [isTimerGoing, setIsTimerGoing] = useState(false);
-  const [isworking, setIsworking] = useState();
+  const [isworking, setIsworking] = useState(true);
   const [worktime, setWorktime] = useState(props.room.worktime);
   const [breaktime, setBreaktime] = useState(props.room.breaktime);
   const [[mins, secs], setTime] = useState([0, worktime]);
 
-  const toggleIsWorking = () => {
-    axios
-      .put(`${URI}/rooms/isworking/${roomName}`)
-      .then((res) => {
-        if (res.status === 200 && res.data[0]) {
-          setIsworking(res.data[0].isworking);
-          setIsTimerGoing(false);
-        }
-      })
-      .catch((error) => {
-        console.log("Error", error);
-      });
-    return false;
-  };
+  //   const toggleIsWorking = (isworking) => {
+  //     axios
+  //       .put(`${URI}/rooms/isworking/${roomName}`, { isworking: true })
+  //       .then((res) => {
+  //         if (res.status === 200 && res.data[0]) {
+  //           setIsworking(res.data[0].isworking);
+  //           console.log("JDEIJIEJ", isworking);
+  //           setIsTimerGoing(false);
+  //         }
+  //       })
+  //       .catch((error) => {
+  //         console.log("Error", error);
+  //       });
+  //     return false;
+  //   };
 
   useEffect(() => {
     setRoomTheme(props.room.theme);
@@ -68,7 +65,9 @@ export default function Room(props) {
 
   const tick = () => {
     if (mins === 0 && secs === 0) {
-      toggleIsWorking();
+      //   toggleIsWorking(isworking);
+      setIsworking(!isworking);
+      setIsTimerGoing(false);
     } else if (secs === 0) {
       setTime([mins - 1, 59]);
     } else {
